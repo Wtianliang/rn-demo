@@ -9,6 +9,10 @@ import {
 import WelCome from '../pages/welcome';
 import Home from '../pages/Home';
 import Detail from '../pages/Detail';
+import { connect } from 'react-redux';
+import {
+  createReactNavigationReduxMiddleware
+} from 'react-navigation-redux-helpers' 
 
 const InitRouter = createStackNavigator({
   WelCome: {
