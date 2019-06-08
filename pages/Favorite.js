@@ -1,10 +1,12 @@
 import React, {Component, Fragment} from 'react';
+import { connect } from 'react-redux';
 
 import {
   Text,
   View,
   StyleSheet, Button
 } from 'react-native';
+import actions from "../redux/action";
 
 
 class Favorite extends Component {
@@ -22,12 +24,7 @@ class Favorite extends Component {
         <Button
           title={'改变主题颜色'}
           onPress={() => {
-            navigation.setParams({
-              theme: {
-                tintColor: 'black',
-                updateTime: new Date().getTime()
-              }
-            })
+            this.props.themeChange('#de1');
           }}
         />
       </Fragment>
@@ -36,4 +33,14 @@ class Favorite extends Component {
 }
 
 const styles = StyleSheet.create({})
-export default Favorite
+const mapStateToProps = state => {
+  return {
+
+  }
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    themeChange: theme => dispatch(actions.themeChange(theme))
+  }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Favorite);

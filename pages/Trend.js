@@ -1,4 +1,6 @@
 import React, {Component, Fragment} from 'react';
+import  { connect } from 'react-redux';
+import actions from '../redux/action';
 
 import {
   Text,
@@ -6,6 +8,7 @@ import {
   StyleSheet,
   Button
 } from 'react-native';
+import theme from "../redux/reducer/theme";
 
 
 class Trend extends Component {
@@ -23,12 +26,7 @@ class Trend extends Component {
         <Button
           title={'改变主题颜色'}
           onPress={() => {
-            navigation.setParams({
-              theme: {
-                tintColor: 'red',
-                updateTime: new Date().getTime()
-              }
-            })
+            this.props.themeChange('#096');
           }}
         />
       </Fragment>
@@ -36,5 +34,16 @@ class Trend extends Component {
   }
 }
 
-const styles = StyleSheet.create({})
-export default Trend
+const styles = StyleSheet.create({});
+
+const mapStateToProps = state => {
+  return {
+
+  }
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    themeChange: theme => dispatch(actions.themeChange(theme))
+  }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Trend);

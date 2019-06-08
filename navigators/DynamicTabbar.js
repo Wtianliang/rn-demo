@@ -3,6 +3,7 @@ import {
   createBottomTabNavigator,
   createAppContainer
 } from 'react-navigation';
+import { connect } from 'react-redux';
 import { BottomTabBar } from 'react-navigation-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -66,18 +67,21 @@ const tabs = {
     }
   }
 }
-export default class DynamicTabbar extends Component{
+class DynamicTabbar extends Component{
   constructor(props) {
     super(props);
   }
 
   dynamicTabbar() {
+    if (this.tabs) return this.tabs;
     const { Popular, Trend, Favorite, Mine } = tabs;
     //决定要渲染的tabbar
     const renderTabs = { Popular, Trend, Favorite, Mine };
-    return (
+    return this.tabs = (
       createAppContainer(createBottomTabNavigator(renderTabs, {
-        tabBarComponent: TabBarComponent
+        tabBarComponent: props => {
+          return <TabBarComponent theme={this.props.theme} {...props} />
+        }
       }))
     )
   }
@@ -91,30 +95,25 @@ export default class DynamicTabbar extends Component{
 class TabBarComponent extends Component {
   constructor(props) {
     super(props);
-    this.theme = {
-      tintColor: props.activeTintColor,
-      updateTime: new Date().getTime()
-    }
+    // this.theme = {
+    //   tintColor: props.activeTintColor,
+    //   updateTime: new Date().getTime()
+    // }
   }
 
   render() {
-    const { routes, index } = this.props.navigation.state;
-    // console.log(this.theme)
-    if (routes[index].params) {
-      const { theme } = routes[index].params;
-      // console.log(theme)
-      if (theme.updateTime > this.theme.updateTime) {
-        this.theme = theme;
-      }
-    }
     return (
       //BottomTabBar 是内置组件
       <BottomTabBar
         {...this.props}
-        activeTintColor={
-          this.theme.tintColor || this.props.activeTintColor
-        }
+        activeTintColor={this.props.theme}
       />
     )
   }
 }
+
+const mapStateToProps = state => ({
+  theme: state.theme.theme,
+});
+
+export default connect(mapStateToProps)(DynamicTabbar);
