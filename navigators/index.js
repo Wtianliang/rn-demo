@@ -14,6 +14,7 @@ import {
 import WelCome from '../pages/welcome';
 import Home from '../pages/Home';
 import Detail from '../pages/Detail';
+import DataStoreTest from '../pages/DataStoreTest';
 
 export const rootCom = 'Main'; //设置跟路由
 
@@ -35,6 +36,9 @@ const MainRouter = createStackNavigator({
   },
   Detail: {
     screen: Detail
+  },
+  DataStoreTest: {
+    screen: DataStoreTest
   }
 })
 

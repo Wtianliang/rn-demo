@@ -1,19 +1,19 @@
 export  default class $router {
-  static resetTohome(parmas) {
-    let { navigation } = parmas;
+  static resetTohome(params) {
+    let { navigation } = params;
     navigation.navigate('Main');
   }
   static goBack(navigation) {
     navigation.goBack()
   }
-  static PageTo(pramas, page) {
+  static PageTo(page,params) {
     const navigation = $router.navigation;
     if (!navigation) {
       console.log('$router.navigation is empty');
       return
     }
     navigation.navigate(page, {
-      ...pramas
+      ...params
     })
   }
 }

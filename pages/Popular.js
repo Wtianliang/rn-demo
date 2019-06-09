@@ -3,20 +3,28 @@ import React, {Component, Fragment} from 'react';
 import {
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  FlatList,
+  RefreshControl
 } from 'react-native';
+import {connect} from 'react-redux';
+import actions from '../redux/action';
 import {
   createMaterialTopTabNavigator,
   createAppContainer
 } from 'react-navigation';
+import PopularItem from '../common/PopularItem';
 import $router from '../navigators/util';
 
+const baseUrl = 'https://api.github.com/search/repositories?q=';
+const queryStr = '&sort=starts';
+const themeColor = 'red';
 class Popular extends Component {
 
   constructor(props) {
     super(props);
     //定义顶部导航展示的title
-    this.topMenu = ['Java','Android','ios','React','React Native','PHP']
+    this.topMenu = ['Java', 'Android', 'ios', 'React', 'React Native', 'PHP']
     this.state = {}
   }
 
@@ -25,7 +33,7 @@ class Popular extends Component {
     const tops = {};
     this.topMenu.forEach((item, index) => {
       tops[`top${index}`] = {
-        screen: props => <Popular1 {...props} label={item}/>,
+        screen: props => <TopMenu {...props} label={item}/>,
         navigationOptions: {
           title: item
         }
@@ -57,25 +65,81 @@ class Popular extends Component {
     return (
       <Fragment>
         <Top/>
-        {/*<Text>top</Text>*/}
       </Fragment>
     );
   }
 }
 
-function Popular1(props) {
-  return (
-    <Fragment>
-      <Text>{props.label}</Text>
-      <Text
-        onPress={() => $router.PageTo({},'Detail')}
-      >go to detail</Text>
-    </Fragment>
-  )
-}function Popular2() {
-  return (
-    <Text>Popular2</Text>
-  )
+class PopularTab extends Component {
+
+  constructor(props) {
+    super(props);
+    const {label} = this.props;
+    this.storeName = label;
+  }
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
+    const {loadPopularData} = this.props;
+    const url = baseUrl + this.storeName + queryStr;
+    loadPopularData(this.storeName, url);
+  }
+
+  render() {
+    const {popular} = this.props;
+    let store = popular[this.storeName];
+    if (!store) {
+        store = {
+          items: [],
+          isLoading: false
+        }
+    }
+    return (
+      <Fragment>
+        <FlatList
+          renderItem={this.renderItem}
+          data={store.items}
+          keyExtractor={item => item.id + ''}
+          refreshControl={
+            <RefreshControl
+              refreshing={store.isLoading}
+              title={'loading'}
+              titleColor={themeColor}
+              colors={[themeColor]}
+              onRefresh={() => this.loadData()}
+              tintColor={themeColor}
+            />
+          }
+        />
+      </Fragment>
+    )
+  }
+  renderItem({ item }) {
+    return (
+      <PopularItem
+        item={item}
+        onSelect={() => {
+
+        }}
+      />
+    )
+  }
 }
-const styles = StyleSheet.create({})
+
+const styles = StyleSheet.create({});
+
+const mapStateToProps = state => ({
+  popular: state.popular
+});
+const mapDispatchToProps = dispatch => ({
+  loadPopularData: (storeName, url) => {
+    dispatch(actions.loadPopularData(storeName, url))
+  }
+});
+
+const TopMenu = connect(mapStateToProps, mapDispatchToProps)(PopularTab);
+
 export default Popular

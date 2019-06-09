@@ -7,6 +7,7 @@ import {
   StyleSheet, Button
 } from 'react-native';
 import actions from "../redux/action";
+import $router from "../navigators/util";
 
 
 class Mine extends Component {
@@ -27,6 +28,14 @@ class Mine extends Component {
             this.props.themeChange('#91d');
           }}
         />
+        <Text
+          onPress={() => {
+            $router.PageTo('DataStoreTest')
+          }}
+        >DataStoreTest</Text>
+        <Text
+          onPress={() => $router.PageTo({},'Detail')}
+        >go to detail</Text>
       </Fragment>
     );
   }
