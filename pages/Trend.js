@@ -36,14 +36,9 @@ class Trend extends Component {
 
 const styles = StyleSheet.create({});
 
-const mapStateToProps = state => {
-  return {
-
-  }
-};
 const mapDispatchToProps = dispatch => {
   return {
     themeChange: theme => dispatch(actions.themeChange(theme))
   }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Trend);
+export default connect(null, mapDispatchToProps)(Trend);
