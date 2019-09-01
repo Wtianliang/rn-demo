@@ -78,53 +78,17 @@ class PopularTab extends Component {
     this.storeName = label;
   }
 
-  componentDidMount() {
-    this.loadData();
-  }
-
-  loadData() {
-    const {loadPopularData} = this.props;
-    const url = baseUrl + this.storeName + queryStr;
-    loadPopularData(this.storeName, url);
-  }
-
   render() {
-    const {popular} = this.props;
-    let store = popular[this.storeName];
-    if (!store) {
-        store = {
-          items: [],
-          isLoading: false
-        }
-    }
     return (
       <Fragment>
-        <FlatList
-          renderItem={this.renderItem}
-          data={store.items}
-          keyExtractor={item => item.id + ''}
-          refreshControl={
-            <RefreshControl
-              refreshing={store.isLoading}
-              title={'loading'}
-              titleColor={themeColor}
-              colors={[themeColor]}
-              onRefresh={() => this.loadData()}
-              tintColor={themeColor}
-            />
-          }
-        />
+        <Text
+          onPress={() => {
+            $router.PageTo('Detail', { id: 2 });
+          }}
+        >
+          跳转详情页
+        </Text>
       </Fragment>
-    )
-  }
-  renderItem({ item }) {
-    return (
-      <PopularItem
-        item={item}
-        onSelect={() => {
-
-        }}
-      />
     )
   }
 }
@@ -132,12 +96,10 @@ class PopularTab extends Component {
 const styles = StyleSheet.create({});
 
 const mapStateToProps = state => ({
-  popular: state.popular
+
 });
 const mapDispatchToProps = dispatch => ({
-  loadPopularData: (storeName, url) => {
-    dispatch(actions.loadPopularData(storeName, url))
-  }
+
 });
 
 const TopMenu = connect(mapStateToProps, mapDispatchToProps)(PopularTab);

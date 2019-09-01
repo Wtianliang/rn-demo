@@ -1,7 +1,8 @@
 import { themeChange } from './theme';
-import { loadPopularData } from './popular';
+import { loadPopularData, loadMorePopular } from './popular';
 
 export default {
   themeChange,
-  loadPopularData
+  loadPopularData,
+  loadMorePopular
 }

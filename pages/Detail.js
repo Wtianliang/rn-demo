@@ -15,6 +15,10 @@ class Detail extends Component {
   }
 
   render() {
+    const { navigation } = this.props;
+
+    console.log(navigation.state);
+
     return (
       <Fragment>
         <Text>Detail</Text>
